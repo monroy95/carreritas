@@ -1,23 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { Flare } from '@material-ui/icons';
 
 import { useEffect } from 'react';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
-export const Car = ({ img, name, velocity, interval = 1000, resetRace = false }) => {
+// const sucessNotify = (nCar) => toast.success('Gano el carro! ', nCar);
+
+export const Car = ({ img, carName, velocity, interval = 1000, resetRace = false }) => {
+  const classes = useStyles();
+  const [positionX, setPositionX] = useState(50);
+
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
   });
 
-  const classes = useStyles();
-  const [positionX, setPositionX] = useState(60);
-
   useEffect(() => {
-    function handleResize() {
-      setDimensions({
-        width: window.innerWidth,
-      });
-    }
-
     const intervalCar = setInterval(() => {
       setPositionX(positionX + velocity);
     }, interval);
@@ -26,30 +24,43 @@ export const Car = ({ img, name, velocity, interval = 1000, resetRace = false })
       clearInterval(intervalCar);
     }
 
-    window.addEventListener('resize', handleResize);
-
     if (resetRace) {
       clearInterval(intervalCar);
-      setPositionX(60);
+      setPositionX(50);
     }
 
     return () => clearInterval(intervalCar);
   });
 
-  console.log('dimension', dimensions.width);
+  useEffect(() => {
+    if (positionX >= dimensions.width - 250) {
+      toast.success(`Gano el carro! ${carName}`);
+    }
+  }, [positionX]);
+
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({
+        width: window.innerWidth,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+  }, []);
 
   return (
     <>
+      <Toaster />
       <img
         src={img}
-        alt={name}
+        alt={carName}
         className={classes.car}
         style={{
           position: 'absolute',
           left: `${positionX}px`,
         }}
       />
-      {positionX} - {dimensions.width}
+      <code>{positionX} KM</code>
     </>
   );
 };
@@ -57,7 +68,9 @@ export const Car = ({ img, name, velocity, interval = 1000, resetRace = false })
 const useStyles = makeStyles((theme) => ({
   car: {
     objectFit: 'cover',
-    height: 100,
+    height: 'auto',
+    width: 150,
     backgroundImage: 'none',
+    transition: 'all 1s ease',
   },
 }));
