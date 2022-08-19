@@ -80,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
 export const RaceArea = () => {
   // const minVelocity = 100;
   // const maxVelocity = 400;
+  // TIEMPO EN UN RANGO DE 1 A 4 SEGUNDOS: SE CAMBIA EN MODO RANDOM
   const minInterval = 1000;
   const maxInterval = 4000;
 
@@ -96,6 +97,7 @@ export const RaceArea = () => {
 
   return (
     <>
+      {/* DEFINICION AREA DE CARRERITAS */}
       <div className={classes.raceContainer}>
         <div className={classes.raceChild}>
           <h1>
@@ -108,6 +110,7 @@ export const RaceArea = () => {
             RESETEAR
           </Button>
 
+          {/* SE CREAN LOS CARRILES PARA CADA CARRITO */}
           <div className={classes.root}>
             <Grid container>
               <Grid item xs={12}>
